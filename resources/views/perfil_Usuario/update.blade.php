@@ -26,7 +26,7 @@
                     <p class="card-text">Last name: {{ Auth::user()->apellido }}</p>
                     <p class="card-text">Email: {{ Auth::user()->correo }}</p>
                     <p class="card-text">Number phone: {{ Auth::user()->num_cel }}</p>
-                    <button type="submit" class="btn btn-primary">Editar perfil</button>
+                    <a href="/editar/{{ Auth::user()->id  }}" class="btn btn-primary">Editar perfil</a>
                 </div>
              </div>
         </div>  

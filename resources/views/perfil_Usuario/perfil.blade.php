@@ -33,11 +33,8 @@
 <!--Registro de productos-->    
     <div class="col-10 col-sm-4" id="perfil" style="width: 20rem; margin-top: 40px;">
         <h5>Ahora puedes registrar tus productos</h5>
-        
-                   @if (\Request::is('perfil_Usuario'))
+
                     @include('perfil_Usuario.create')
-                   @endif
-        
     </div>
      
 <!--Productos previamente publicados por el usuario-->
@@ -56,18 +53,36 @@
                     <p class="card-text"><strong>Precio: ${{ $dato->precio }}</strong></p>
                     <p class="card-text"><strong>Descripción: {{ $dato->descripcion }}</strong></p>
                     <a href="/producto/{{ $dato->id  }}/editar" class="btn btn-primary">editar</a>
-                    <a href="/producto/{{ $dato->id }}/borrar" class="btn btn-danger"></a>
-
-                    {{-- comment
-                        {!! link_to_route('producto.edit',$title='Editar', $parameters=$dato->id, $attributes=['class'=>'btn btn-success']) !!}
-                        {!! link_to_route('producto.destroy', $title='Eliminar', $parameters=$dato->id, $attributes=['class'=>'btn btn-danger']) !!}
-                        --}}
+                    <a href="/producto/{{ $dato->id }}/borrar" class="btn btn-danger">Vendido</a>
                 </div>
             </div>
         </div>    
         @endforeach
     </div>
 </div>
+<div class="container-fluid" id="registrados">
+    <hr>
+        <h2>Productos Vendidos</h2>
+        <h6>En este apartado podra visualizar los productos Vendidos</h6>
+<div class="row">  
+    {{-- productos del usuario --}}
+    @foreach ($itemSold as $sold)
+    <div class="col-sm">
+        <div class="card text-center" style="width: 18rem; margin-top: 40px;">
+                <img class="card-img-top rounded-circle mx-auto d-block" style="height: 200px; width: 200px; background-color: #EFEFEF;" src="productos/{{ $sold->url }}" alt="">
+            <div class="card-body">
+                <h5 class="card-title">{{ $sold->nombre }}</h5>
+                <p class="card-text"><strong>Precio: ${{ $sold->precio }}</strong></p>
+                <p class="card-text"><strong>Descripción: {{ $sold->descripcion }}</strong></p>
+                <a href="/producto/{{ $sold->id  }}/editar" class="btn btn-primary">editar</a>
+                <a href="/producto/{{ $sold->id }}/ofrecer" class="btn btn-success">Ofrecer</a>
+            </div>
+        </div>
+    </div>    
+    @endforeach
+</div>
+</div>
+{{-- comment --}}
 
 </div>
 

@@ -24,17 +24,17 @@ class productosController extends Controller
         //$img = imagen::all();
         //return view('index',['data'=>$data,'img'=>$img]);
 
-        $data = DB::table('productos')->join('imagen','productos.id','imagen.id_producto')->select('productos.*','imagen.*')->get();
+        $data = DB::table('productos')->join('imagen','productos.id','imagen.id_producto')->where('productos.status','=','1')->select('productos.*','imagen.*')->get();
         return view('index',['data'=>$data]);
         
     }
     public function perfil(){
         
-        $item=DB::table('productos')->join('imagen','productos.id','imagen.id_producto')->where('productos.id_usuario','=',auth::user()->id)->select('productos.*','imagen.*')->get();
-
+         $item=DB::table('productos')->join('imagen','productos.id','imagen.id_producto')->where('productos.id_usuario','=',auth::user()->id)->where('productos.status','=','1')->select('productos.*','imagen.*')->get();
+         $itemSold=DB::table('productos')->join('imagen','productos.id','imagen.id_producto')->where('productos.id_usuario','=',auth::user()->id)->where('productos.status','=','0')->select('productos.*','imagen.*')->get();
         
-        //$item = productos::where('id_usuario',Auth::user()->id)->get();
-        return view('perfil_Usuario.perfil',compact('item'));
+   
+        return view('perfil_Usuario.perfil',['item'=>$item,'itemSold'=>$itemSold]);
 
     }
 
@@ -148,6 +148,15 @@ class productosController extends Controller
      */
     public function destroy($id)
     {
+        $editar=productos::find($id);
+        $editar->status='0';
+        $editar->save();
+        return Redirect::to('perfil_Usuario');
+    }
+    public function ofrecer($id){
+        $editar=productos::find($id);
+        $editar->status='1';
+        $editar->save();
         return Redirect::to('perfil_Usuario');
     }
 }
