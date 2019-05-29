@@ -86,7 +86,6 @@
 
 </div>
 
-<script src="{{ asset('js/logica.js') }}"></script>
 
 
 @endsection

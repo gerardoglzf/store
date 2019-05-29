@@ -30,6 +30,8 @@
     <script src="{{ asset('js/jquery.min.js') }}"></script>
     <script src="{{ asset('js/dropzone.js') }}"></script>
     <script src="{{ asset('js/logica.js') }}"></script> 
+    <script src="{{ asset('js/modal.js') }}"></script>
+    <script src="{{ asset('js/bootstrap.js') }}"></script>
     
 </body>
 </html>
