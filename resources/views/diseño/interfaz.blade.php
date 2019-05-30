@@ -14,16 +14,28 @@
   <body>
     <!--Navbar-->
     <div class="topnav">
-      <a class="active" href="#TecStore">TecStore</a>
+      <a class="active" href="/">TecStore</a>
+      @if (Auth::check())
+      <a href="/perfil_Usuario">Mi Perfil</a>
+      @else
       <a href="./registros">Registrate</a>
+      @endif
+
       <a href="#contact">Contacto</a>
       <a href="#about">Acerca de</a>
-      <div class="login-container">   
+      <div class="login-container">
+        
+        @if (Auth::check())
+        <a>{{ auth::user()->nombre }} {{ auth::user()->apellido }}</a>
+        <a href="{{ url('/cerrar_sesion') }}" class="active"> logout </a
+        {{ Form::submit('logout',['class'=>'btn btn-primary', 'id'=>'iniciar']) }}
+        @else
         {!! Form::open(['route'=>'log.store', 'method'=>'POST']) !!}
         <input type="text" placeholder="Username" name="username" required>
         <input type="password" placeholder="Password" name="password" required>
         {!! Form::submit('Iniciar',['class'=>'btn btn-primary', 'id'=>'iniciar']) !!}
         {!! Form::close() !!}
+        @endif    
       </div>
     </div>   
     

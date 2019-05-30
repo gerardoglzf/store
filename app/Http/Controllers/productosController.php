@@ -3,13 +3,13 @@
 namespace TecStore\Http\Controllers;
 
 use Auth;
-use DB;
 use Session;
 use Redirect;   
 use TecStore\imagen;
 use TecStore\productos;
 use TecStore\user;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class productosController extends Controller
 {
@@ -18,13 +18,38 @@ class productosController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    
     public function index()
     {
-        //$data = productos::all();
-        //$img = imagen::all();
-        //return view('index',['data'=>$data,'img'=>$img]);
+        $data = DB::table('users')
+        ->join(
+            'productos',
+            'productos.id_usuario',
+            'users.id')
+        ->join(
+            'imagen',
+            'productos.id',
+            'imagen.id_producto')
+        ->where(
+            'productos.status',
+            '=',
+            '1')
+        ->select(
+        'users.nombre',
+        'users.apellido',
+        'users.avatar',
+        'users.num_cel',
+        'users.facebook',
+        'users.correo',
+        'productos.precio',
+        'productos.cantidad',
+        'productos.id',
+        'productos.descripcion',
+        'imagen.alt',
+        'imagen.url')
+        ->get();
 
-        $data = DB::table('productos')->join('imagen','productos.id','imagen.id_producto')->where('productos.status','=','1')->select('productos.*','imagen.*')->get();
+        
         return view('index',['data'=>$data]);
         
     }
@@ -59,8 +84,8 @@ class productosController extends Controller
      */
     public function store(Request $request)
     {
-
-        $producto = productos::create([
+        //return view('index');
+       $producto = productos::create([
            'nombre' => $request['nom_producto'],
            'descripcion' => $request['descripcion'],
            'cantidad' => $request['cantidad'],
@@ -71,7 +96,6 @@ class productosController extends Controller
         
         $this->img($request,$producto->id);
         return redirect('/perfil_Usuario')->with('message','store');
-        
     }
 
     public function img(Request $request,$id){
@@ -100,7 +124,7 @@ class productosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($nombre)
+    public function show(Request $request)
     {
         $nombre_p = productos::where('nombre','=',$nombre);
         return view('perfil_Usuario.update',compact('nombre_p'));
@@ -158,5 +182,42 @@ class productosController extends Controller
         $editar->status='1';
         $editar->save();
         return Redirect::to('perfil_Usuario');
+    }
+    public function search(Request $request){
+        $buscar=$request->get('search');
+        $data = DB::table('users')
+        ->join(
+            'productos',
+            'productos.id_usuario',
+            'users.id')
+        ->join(
+            'imagen',
+            'productos.id',
+            'imagen.id_producto')
+        ->where(
+            'productos.status',
+            '=',
+            '1'
+            )
+        ->where(
+            'productos.nombre',
+            'like',
+            '%' . $buscar . '%'
+            )
+        ->select(
+            'users.nombre',
+            'users.apellido',
+            'users.avatar',
+            'users.num_cel',
+            'users.facebook',
+            'users.correo',
+            'productos.precio',
+            'productos.cantidad',
+            'productos.id',
+            'productos.descripcion',
+            'imagen.alt',
+            'imagen.url')
+        ->get();
+        return view('index',['data'=>$data]);
     }
 }
